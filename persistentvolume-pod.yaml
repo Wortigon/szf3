@@ -8,11 +8,16 @@ spec:
       persistentVolumeClaim:
         claimName: persistentvolume-claim
   containers:
-    - name: persistentvolume-container
-      image: nginx
-      ports:
-        - containerPort: 80
-          name: "http-server"
-      volumeMounts:
-        - mountPath: "/usr/share/nginx/html"
-          name: task-pv-storage
+  - name: container1
+    image: nginx
+    volumeMounts:
+      - mountPath: /usr/share/nginx/html
+        name: persistentvolume-storage
+  
+  - name: container2
+    image: nginx
+    volumeMounts:
+      - mountPath: /work/data
+        name: persistentvolume-storage
+    command: ["/bin/sh"]
+    args: ["-c", "echo Hello from the container > /work/data/index.html"]
