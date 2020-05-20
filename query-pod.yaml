@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: query-pod
@@ -13,9 +13,12 @@ spec:
     metadata:
       labels:
         name: q-pod
-    
-    containers:
-    - name: Query
-      image: debian
-      command: ["/bin/sh", "-c"]
-      args: ["while true; do curl <insert persistentvolume-pod's ip here>:8080, sleep 50; done;"]
+    spec:
+      containers:
+      - name: query
+        image: debian
+        command: ["/bin/sh", "-c"]
+        args:
+        - while true; do
+            curl <insert persistentvolume-pod's ip here>:8080, sleep 50;
+          done
