@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: persistentvolume-pod
@@ -13,29 +13,27 @@ spec:
     metadata:
       labels:
         name: pv-pod
-      
-    volumes:
-    - name: persistentvolume-storage
-      persistentVolumeClaim:
-        claimName: persistentvolume-claim
-        
-    containers:
-    - name: FrontEnd
-      image: nginx
-      volumeMounts:
-      - mountPath: /usr/share/nginx/html
-        name: persistentvolume-storage
-      ports:
-      - containerPort:8080
-
-    - name: BackEnd
-      image: debian
-      volumeMounts:
-      - mountPath: /usr/share/nginx/html
-        name: persistentvolume-storage
-      command: ["/bin/sh", "-c"]
-      args: 
-      - while true; do
-          "echo Hello from the backend \r\n > /usr/share/nginx/html/index.html";
-          sleep 50;
-        done
+    spec:
+      volumes:
+      - name: persistentvolume-storage
+        persistentVolumeClaim:
+          claimName: persistentvolume-claim
+      containers:
+      - name: frontend
+        image: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: persistentvolume-storage
+        ports:
+        - containerPort:8080
+      - name: backend
+        image: debian
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: persistentvolume-storage
+        command: ["/bin/sh", "-c"]
+        args: 
+        - while true; do
+            "echo Hello from the backend \r\n > /usr/share/nginx/html/index.html";
+            sleep 50;
+          done
