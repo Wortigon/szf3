@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: persistentvolume-pod
   labels:
-    name: pv-pod 
+    app: pv-pod 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: pv-pod
+      app: pv-pod
   template:
     metadata:
       labels:
-        name: pv-pod
+        app: pv-pod
     spec:
       volumes:
       - name: persistentvolume-storage
@@ -20,12 +20,13 @@ spec:
           claimName: persistentvolume-claim
       containers:
       - name: frontend
-        image: nginx
+        image: nginx:1.8
         volumeMounts:
         - mountPath: /usr/share/nginx/html
           name: persistentvolume-storage
         ports:
         - containerPort:80
+          name: "http-server"
       - name: backend
         image: debian
         volumeMounts:
@@ -34,6 +35,6 @@ spec:
         command: ["/bin/sh", "-c"]
         args: 
         - while true; do
-            "echo Hello from the backend \r\n > /usr/share/nginx/html/index.html";
-            sleep 50;
+            echo "Hello from the backend! \r\n" >> "/usr/share/nginx/html/index.html";
+            sleep 100;
           done
