@@ -16,9 +16,10 @@ spec:
     spec:
       containers:
       - name: query
-        image: debian
-        command: ["/bin/sh", "-c"]
+        image: byrnedo/alpine-curl
+        command: ["ash", "-c"]
         args:
         - while true; do
-            curl <insert persistentvolume-pod's ip here>:8080, sleep 50;
+            curl master-26:31414;
+            sleep 50;
           done
