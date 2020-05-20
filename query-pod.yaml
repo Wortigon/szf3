@@ -1,1 +1,21 @@
-
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: query-pod
+  labels:
+    name: q-pod 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: q-pod
+  template:
+    metadata:
+      labels:
+        name: q-pod
+    
+    containers:
+    - name: Query
+      image: debian
+      command: ["/bin/sh", "-c"]
+      args: ["while true; do curl <insert persistentvolume-pod's ip here>:8080, sleep 50; done;"]
